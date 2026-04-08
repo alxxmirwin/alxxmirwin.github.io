@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexander Irwin — Game Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0c0e10;
+      --off-black: #121518;
+      --panel: #171b1f;
+      --border: rgba(255,255,255,0.08);
+      --border-bright: rgba(255,255,255,0.16);
+      --accent: #4aafc8;
+      --accent-dim: rgba(74,175,200,0.10);
+      --accent-mid: rgba(74,175,200,0.22);
+      --text: #eef0ed;
+      --muted: #8a8f8b;
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 3rem;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 70% at 75% 50%, rgba(74,175,200,0.05) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(74,175,200,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px; height: 2px;
+      background: var(--accent);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.8rem, 7vw, 6.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 1.75rem;
+    }
+    h1 span { color: var(--accent); }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: var(--accent);
+      color: #0a1520;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border: 1px solid var(--border-bright);
+      color: var(--text);
+      font-weight: 400;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+    /* Hero right — role tags */
+    .hero-roles {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .role-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .role-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .role-card:hover { border-color: var(--border-bright); background: #1c2126; }
+    .role-card:hover::before { opacity: 1; }
+    .role-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.85rem;
+      display: block;
+    }
+    .role-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      letter-spacing: 0em;
+      color: var(--text);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .role-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .section-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 4rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--off-black); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      font-size: 0.97rem;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .stat-box {
+      background: var(--panel);
+      padding: 2rem 1.5rem;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      display: block;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--black); }
+    .exp-list { display: flex; flex-direction: column; gap: 0; }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .exp-item:first-child { border-top: 1px solid var(--border); }
+    .exp-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      padding-top: 0.15rem;
+    }
+    .exp-date .exp-present {
+      display: inline-block;
+      margin-top: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+    }
+    .exp-role {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .exp-company {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    .exp-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--off-black); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .project-thumb {
+      aspect-ratio: 16/9;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-thumb-placeholder {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: rgba(255,255,255,0.05);
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+    .project-type-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      background: var(--accent);
+      color: #0a1520;
+      border-radius: 20px;
+    }
+    .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .project-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 1.25rem; }
+    .project-links { display: flex; gap: 0.75rem; }
+    .project-link {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(232,255,71,0.3);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+    .project-link:hover { border-color: var(--accent); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      text-align: center;
+    }
+    #contact .section-label { justify-content: center; }
+    #contact .section-label::after { display: none; }
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 5rem;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.75rem;
+      border: 1px solid var(--border-bright);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .contact-link:hover { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+    .contact-link svg { flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--off-black);
+    }
+    footer p { font-size: 0.78rem; color: var(--muted); }
+    .footer-name { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 0.1em; color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * { animation: fadeUp 0.7s ease both; }
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.35s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.5s; }
+    .hero-roles { animation: fadeUp 0.7s 0.4s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; gap: 3rem; min-height: unset; }
+      .hero-roles { grid-template-columns: 1fr 1fr; }
+      section { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+    @media (max-width: 550px) {
+      .nav-links { display: none; }
+      .hero-roles { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">AI.</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary" style="padding: 0.55rem 1.4rem; font-size: 0.75rem;">Hire Me</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Game Designer &amp; Software Developer</div>
+      <h1>Alexander<br /><span>Irwin</span></h1>
+      <p class="hero-desc">
+        Building scalable, engaging software through collaborative teamwork — from core game systems and UI to content strategy and community-driven events.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-ghost">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-roles">
+      <div class="role-card">
+        <span class="role-icon">🎮</span>
+        <span class="role-title">Gameplay Programming</span>
+        <span class="role-desc">Player mechanics, AI systems, physics interactions, and the core loops that make games feel great.</span>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🖥️</span>
+        <span class="role-title">UI Programming</span>
+        <span class="role-desc">Responsive, polished interfaces that communicate clearly and stay out of the player's way.</span>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🗺️</span>
+        <span class="role-title">Level Design</span>
+        <span class="role-desc">Spatial storytelling, pacing, and environment design that guides and surprises players.</span>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">📋</span>
+        <span class="role-title">Project Management</span>
+        <span class="role-desc">Scoping, scheduling, and team coordination to ship on time without burning out the crew.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">Who I Am</div>
+    <h2>About Me</h2>
+    <p class="section-sub">A little bit about where I've been and how I work.</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm <strong>Alexander Irwin</strong>, a software developer and game designer based in Elkton, Maryland, with a B.A. in Game Studies &amp; eSports (minor: Philosophy) from the University of Delaware.
+        </p>
+        <p>
+          My experience spans game design, hardware/software engineering, content creation, and event production. I bring a strong foundation in Python, Java, C++, and C#, with hands-on experience in Unity, Godot, and GameMaker Studio 2 across macOS, Windows, and Linux.
+        </p>
+        <p>
+          I'm passionate about using technology to solve problems — whether that's building core game systems, shipping a Raspberry Pi voice assistant, growing a 611K-subscriber YouTube channel through data-driven strategy, or coordinating a university-wide game jam from the ground up.
+        </p>
+        <div style="margin-top: 2rem;">
+          <a href="#projects" class="btn-ghost">See My Work ↓</a>
+        </div>
+      </div>
+      <div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-num">611K+</span>
+            <span class="stat-label">YouTube Subscribers</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">8%</span>
+            <span class="stat-label">Views Boost via Analytics</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">9</span>
+            <span class="stat-label">Games from Climate Jam</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">5+</span>
+            <span class="stat-label">Years in Game Dev</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">Career</div>
+    <h2>Experience</h2>
+    <p class="section-sub">Where I've shipped, struggled, and leveled up.</p>
+
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div class="exp-date">
+          Jan 2025 — Present
+          <div class="exp-present">Current</div>
+        </div>
+        <div>
+          <div class="exp-role">Content Creator</div>
+          <div class="exp-company">DazzVideos LLC · Remote</div>
+          <p class="exp-desc">
+            Applied YouTube Analytics data in Sheets &amp; Excel to optimize strategy, boosting views by 8% and supporting growth to 611K subscribers. Produced video content collaboratively with a multinational team.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">YouTube Analytics</span>
+            <span class="tag">Google Sheets</span>
+            <span class="tag">Excel</span>
+            <span class="tag">Content Strategy</span>
+            <span class="tag">Adobe Premiere Pro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Oct 2025 — Feb 2026</div>
+        <div>
+          <div class="exp-role">Hardware / Software Engineer</div>
+          <div class="exp-company">AI Code Academy · Newark, DE</div>
+          <p class="exp-desc">
+            Prototyped and supported a Raspberry Pi-based voice assistant device, troubleshooting hardware, audio peripherals, OS configuration, and Python applications. Created clear design and handoff documentation to support transition from Raspberry Pi prototyping to custom hardware development.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag">Python</span>
+            <span class="tag">Linux</span>
+            <span class="tag">Hardware Prototyping</span>
+            <span class="tag">Technical Documentation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Dec 2023 — Apr 2024</div>
+        <div>
+          <div class="exp-role">Intern Game Jam Coordinator</div>
+          <div class="exp-company">University of Delaware Climate Hub · Newark, DE</div>
+          <p class="exp-desc">
+            Spearheaded the University of Delaware's inaugural Climate Change Game Jam, fostering the development of climate-science focused student video games. Directed event strategy, collaborating with guest speakers, university partners, and student game developers.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Event Strategy</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Community Building</span>
+            <span class="tag">Partnership Coordination</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Jun 2019 — Aug 2024</div>
+        <div>
+          <div class="exp-role">Stage Director</div>
+          <div class="exp-company">Cecil College Young People's Theatre Program · Elkton, MD</div>
+          <p class="exp-desc">
+            Collaborated with faculty and staff to support the theatre program's transition to online learning. Oversaw technical planning and implementation for theatrical productions, supervising intern designers across sets, lighting, sound, costumes, and props.
+          </p>
+          <div class="exp-tags">
+            <span class="tag">Production Management</span>
+            <span class="tag">Team Leadership</span>
+            <span class="tag">Technical Direction</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" style="background: var(--black);">
+    <div class="section-label">Toolkit</div>
+    <h2>Skills</h2>
+    <p class="section-sub">Languages, tools, and platforms I work with.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+
+      <div style="background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+        <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">Programming &amp; Scripting</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="tag">Python</span><span class="tag">C++</span><span class="tag">Java</span><span class="tag">C</span><span class="tag">C#</span><span class="tag">GML</span><span class="tag">GDScript</span><span class="tag">Lua</span>
+        </div>
+      </div>
+
+      <div style="background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+        <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">Game Engines &amp; Platforms</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="tag">Unity</span><span class="tag">Godot</span><span class="tag">GameMaker Studio 2</span><span class="tag">macOS</span><span class="tag">Windows</span><span class="tag">Linux</span>
+        </div>
+      </div>
+
+      <div style="background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+        <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">Collaboration &amp; Productivity</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="tag">Git / GitHub</span><span class="tag">Google Workspace</span><span class="tag">MS Office</span><span class="tag">ClickUp</span><span class="tag">Trello</span><span class="tag">Asana</span>
+        </div>
+      </div>
+
+      <div style="background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+        <div style="font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">Specialized Tools</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="tag">SQL / MySQL</span><span class="tag">AWS</span><span class="tag">Raspberry Pi</span><span class="tag">Adobe Premiere Pro</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Portfolio</div>
+    <h2>Projects</h2>
+    <p class="section-sub">Games and tools I've built, shipped, or contributed to.</p>
+
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-thumb" style="background: #0d1218;">
+          <div class="project-thumb-placeholder">COSMIC CRAB</div>
+          <span class="project-type-badge">Indie Game</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">Cosmic Crab Games</div>
+          <p class="project-desc">
+            Five-plus years of game development, from composer and developer to lead. Shipped multiple titles using Unity and Godot across Windows, macOS, and Linux — handling core systems, workflows, and music composition.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom: 1rem;">
+            <span class="tag">Unity</span>
+            <span class="tag">Godot</span>
+            <span class="tag">C#</span>
+            <span class="tag">GML</span>
+            <span class="tag">Lua</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View on itch.io →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb" style="background: #0e1410;">
+          <div class="project-thumb-placeholder">CLIMATE JAM</div>
+          <span class="project-type-badge">Game Jam</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">UD Climate Change Game Jam</div>
+          <p class="project-desc">
+            Spearheaded the University of Delaware's inaugural Climate Change Game Jam — directing event strategy, collaborating with guest speakers and university partners, and fostering nine original climate-science games.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom: 1rem;">
+            <span class="tag">Event Production</span>
+            <span class="tag">Game Design</span>
+            <span class="tag">Community</span>
+          </div>
+          <div class="project-links">
+            <a href="https://www.linkedin.com/in/alexander-irwin-881803260/" target="_blank" rel="noopener" class="project-link">View on LinkedIn →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb" style="background: #100e14;">
+          <div class="project-thumb-placeholder">DAZZ</div>
+          <span class="project-type-badge">Content</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">DazzVideos — Content Strategy</div>
+          <p class="project-desc">
+            Applied YouTube Analytics data in Sheets &amp; Excel to optimize strategy, boosting views by 8% and supporting growth to 611K subscribers. Produced video content with a multinational team.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom: 1rem;">
+            <span class="tag">YouTube Analytics</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">Adobe Premiere Pro</span>
+          </div>
+          <div class="project-links">
+            <a href="https://www.youtube.com/@DazzVideos" target="_blank" rel="noopener" class="project-link">View Channel →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb" style="background: #0e1212;">
+          <div class="project-thumb-placeholder">GUILDEDCRAFT</div>
+          <span class="project-type-badge">Server Admin</span>
+        </div>
+        <div class="project-body">
+          <div class="project-title">Guildedcraft Server</div>
+          <p class="project-desc">
+            Managed an online gaming server with ~50 active users, implementing custom Java plugins and backend optimizations to enhance performance, security, and user experience. Employed MySQL to manage server plugin data.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom: 1rem;">
+            <span class="tag">Java</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Linux</span>
+            <span class="tag">Backend</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Let's Talk</div>
+    <h2>Get In Touch</h2>
+    <p class="contact-sub">
+      Open to new opportunities, collaborations, and interesting conversations about games and software. Drop me a line.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:alxxmirwin@gmail.com" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+        alxxmirwin@gmail.com
+      </a>
+      <a href="tel:+14439072805" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.4 2 2 0 0 1 3.55 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.86-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        (443) 907-2805
+      </a>
+      <a href="https://www.linkedin.com/in/alexander-irwin-881803260/" target="_blank" rel="noopener" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://www.youtube.com/@DazzVideos" target="_blank" rel="noopener" class="contact-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        DazzVideos
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-name">Alexander Irwin</span>
+    <p>Elkton, MD · Game Designer &amp; Software Developer · © 2025</p>
+  </footer>
